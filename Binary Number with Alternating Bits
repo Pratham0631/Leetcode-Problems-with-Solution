@@ -1,0 +1,55 @@
+=> Given a positive integer, check whether it has alternating bits: namely, if two adjacent bits will always have different values.
+
+=> Example 1:
+
+      Input: n = 5
+      Output: true
+      Explanation: The binary representation of 5 is: 101
+      Example 2:
+      
+      Input: n = 7
+      Output: false
+      Explanation: The binary representation of 7 is: 111.
+
+=> MY SOLUTION:
+       public boolean hasAlternatingBits(int n) {
+            int lastBit = -1;
+      
+            while(n > 0){
+                if((n & 1) != lastBit){
+                    lastBit = (n & 1);
+                }
+                else{
+                    return false;
+                }
+                n = n >> 1;
+            }
+      
+            return true;
+        }
+
+
+=> We can use -> Integer.toBinaryString(); // approach 1
+
+
+=> Division and Remainder // approach 1
+      public boolean hasAlternatingBits(int n) {
+        int currBit = n % 2;
+        n = n / 2;
+        
+        while(n > 0){
+            if(currBit == n % 2) return false;
+
+            currBit = n % 2;
+            n = n / 2;
+        }
+
+        return true;
+    }
+
+
+=> SUPER OPTIMIZED
+      public boolean hasAlternatingBits(int n) {
+        int res = n ^ (n >> 1);
+        return (res & (res + 1)) == 0 ? true : false;
+      }
