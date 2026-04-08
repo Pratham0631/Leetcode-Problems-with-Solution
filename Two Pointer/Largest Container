@@ -1,0 +1,31 @@
+=> You are given an array of numbers, each representing the height of a vertical line on a graph. A container can be formed with any pair of these lines, along with the x-axis of the graph. Return the amount of water which the largest container can hold.
+
+Example:
+Example
+Input: heights = [2, 7, 8, 3, 7, 6]
+Output: 24
+
+=> SOLUTION:
+  import java.util.ArrayList;
+
+  public class Main {
+      public int largest_container(ArrayList<Integer> heights) {
+  
+          int n = heights.size();
+          int left = 0;
+          int right = n - 1;
+  
+          int maxAmt = 0;
+  
+          while(left < right){
+  
+              int height = Math.min(heights.get(left), heights.get(right));
+              int width = right - left;
+  
+              maxAmt = Math.max(maxAmt, height * width);
+              if(heights.get(left) <= heights.get(right)) left++;
+              else right--;
+          }
+          return maxAmt;
+      }
+}
