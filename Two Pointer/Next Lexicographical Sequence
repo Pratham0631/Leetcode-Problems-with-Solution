@@ -1,0 +1,66 @@
+=> Given a string of lowercase English letters, rearrange the characters to form a new string representing the next immediate sequence in lexicographical (alphabetical) order. If the given string is already last in lexicographical order among all possible arrangements, return the arrangement that's first in lexicographical order.
+
+Example 1:
+Input: s = 'abcd'
+Output: 'abdc'
+Explanation: "abdc" is the next sequence in lexicographical order after rearranging "abcd".
+
+Example 2:
+Input: s = 'dcba'
+Output: 'abcd'
+Explanation: Since "dcba" is the last sequence in lexicographical order, we return the first sequence: "abcd".
+
+Constraints:
+  The string contains at least one character.
+
+=> EXPLANATION:
+   Visit ->  https://bytebytego.com/courses/coding-patterns/two-pointers/next-lexicographical-sequence
+
+=> SOLUTION:
+  
+  public class Main {
+      public static String next_lexicographical_sequence(String s) {
+          
+          char[] letters = s.toCharArray();
+          int n = letters.length;
+  
+          int pivot = n - 2;
+          while (pivot >= 0 && letters[pivot] >= letters[pivot + 1]) {
+              pivot--;
+          }
+  
+          // In case -> If already greatest sequence
+          if(pivot == -1){
+              reverse(letters, 0, n - 1);
+              return new String(letters);
+          }
+  
+          // Find rightmost successor (RMC)
+          int rightmostSuccessor = n - 1;
+          while(letters[rightmostSuccessor] <= letters[pivot]){
+              rightmostSuccessor--;
+          }
+  
+          // Swap RMC with pivot
+          char temp = letters[pivot];
+          letters[pivot] = letters[rightmostSuccessor];
+          letters[rightmostSuccessor] = temp;
+  
+          // Reduce substring from (pivot + 1) to (end)
+          reverse(letters, pivot + 1, n - 1);
+  
+          return new String(letters);
+      }
+
+      public static void reverse(char[] arr, int start, int end){
+          while(start < end){
+              char temp = arr[start];
+              arr[start] = arr[end];
+              arr[end] = temp;
+  
+              start++;
+              end--;
+          }
+      }
+  }
+   
