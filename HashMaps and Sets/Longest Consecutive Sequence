@@ -1,0 +1,70 @@
+=> Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence. You must write an algorithm that runs in O(n) time.
+
+Example 1:
+    Input: nums = [100,4,200,1,3,2]
+    Output: 4
+    Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
+
+Example 2:
+    Input: nums = [0,3,7,2,5,8,4,6,0,1]
+    Output: 9
+
+Example 3:
+    Input: nums = [1,0,1,2]
+    Output: 3
+
+=> SOLUTION: (SORTING)
+  public int longestConsecutive(int[] nums) {
+        int n = nums.length;
+        if(n == 0) return 0;
+        
+        Arrays.sort(nums);
+
+        int longest = 1;
+        int curr = 1;
+
+        for(int i = 1; i < n; i++){
+            if(nums[i] - nums[i - 1] == 1){
+                curr++;
+            }
+            else if(nums[i] - nums[i - 1] < 1){
+                continue;
+            }
+            else{
+                curr = 1;
+            }   
+            longest = Math.max(longest, curr);
+        }
+
+        return longest;
+  }
+
+
+=> SOLUTION: (OPTIMIZED)
+  public int longestConsecutive(int[] nums) {
+        int n = nums.length;
+        if(n == 0) return 0;
+
+        HashSet<Integer> numSet = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            numSet.add(nums[i]);
+        }
+
+        int longestChain = 0;
+
+        for (int num : numSet) {
+            // If the current number is the smallest number in its chain
+            if (!numSet.contains(num - 1)) {
+                int currentNum = num;
+                int currentChain = 1;
+                // Continue to find the next consecutive numbers in the chain.
+                while (numSet.contains(currentNum + 1)) {
+                    currentNum += 1;
+                    currentChain += 1;
+                }
+                longestChain = Math.max(longestChain, currentChain);
+            }
+        }
+
+        return longestChain;
+  }
