@@ -1,0 +1,101 @@
+
+=> Given a partially completed 9×9 Sudoku board, determine if the current state of the board adheres to the rules of the game:
+Each row and column must contain unique numbers between 1 and 9, or be empty (represented as 0).
+Each of the nine 3×3 subgrids that compose the grid must contain unique numbers between 1 and 9, or be empty.
+Note: You are asked to determine whether the current state of the board is valid given these rules, not whether the board is solvable.
+
+Constraints:
+Assume each integer on the board falls in the range of [0, 9]
+
+=> SOLUTION:
+  public boolean verify_sudoku_board(ArrayList<ArrayList<Integer>> board) {
+        int m = board.size();
+        int n = board.get(0).size();
+
+        // All row check
+        for(int i = 0; i < m; i++){
+            int[] freq = new int[10];
+            for(int j = 0; j < n; j++){
+                if(board.get(i).get(j) != 0 && ++freq[board.get(i).get(j)] > 1){
+                    return false;
+                }
+            }
+        }
+
+        // All col check
+        for(int j = 0; j < n; j++){
+            int[] freq = new int[10];
+            for(int i = 0; i < m; i++){
+                if(board.get(i).get(j) != 0 && ++freq[board.get(i).get(j)] > 1){
+                    return false;
+                }
+            }
+        }
+
+        // All subgrid check
+        for(int row = 0; row < 9; row += 3){
+            for(int col = 0; col < 9; col += 3){
+                int[] freq = new int[10];
+
+                for(int i = 0; i < 3; i++){
+                    for(int j = 0; j < 3; j++){
+                        int val = board.get(row + i).get(col + j);
+                        if(val != 0 && ++freq[val] > 1){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+  }
+
+=> OPTIMIZED SOLUTION:
+  public boolean isValidSudoku(char[][] board) {
+    
+        // Initialise
+        ArrayList<HashSet<Integer>> row_sets = new ArrayList<>();
+        ArrayList<HashSet<Integer>> col_sets = new ArrayList<>();
+        HashSet<Integer>[][] subgrid_sets = new HashSet[3][3];
+        for (int i = 0; i < 9; i++) {
+            row_sets.add(new HashSet<>());
+            col_sets.add(new HashSet<>());
+        }
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                subgrid_sets[i][j] = new HashSet<>();
+            }
+        }
+
+        // Main Traversal
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+
+                // If empty
+                char ch = board[r][c];
+                if (ch == '.') {
+                    continue;
+                }
+
+                // Check if 'num' has been seen in the current row, column, or subgrid.
+                if(row_sets.get(r).contains(ch - '0')){
+                    return false;
+                }
+                if(col_sets.get(c).contains(ch - '0')){
+                    return false;
+                }
+                if(subgrid_sets[r / 3][c / 3].contains(ch - '0')){
+                    return false;
+                }
+
+                // If we passed the above checks, mark this value as seen by adding it to
+                // its corresponding hash sets.
+                row_sets.get(r).add(ch - '0');
+                col_sets.get(c).add(ch - '0');
+                subgrid_sets[r / 3][c / 3].add(ch - '0');
+            }
+        }
+
+        return true;
+  }
