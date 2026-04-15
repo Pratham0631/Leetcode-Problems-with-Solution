@@ -1,0 +1,56 @@
+=> Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's. You must do it in place.
+
+=> INTUITION: Rather than using (m + n) space, use the matrix itself. we can do it. Think about it!!!!
+
+=> SOLUTION:
+  public void setZeroes(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        boolean rowFlag = false;
+        for(int row = 0; row < m; row++){
+            if(matrix[row][0] == 0){
+                rowFlag = true;
+                break;
+            }
+        }
+
+        boolean colFlag = false;
+        for(int col = 0; col < n; col++){
+            if(matrix[0][col] == 0){
+                colFlag = true;
+                break;
+            }
+        }
+
+        // Marking pointers
+        for(int i = 1; i < m; i++){
+            for(int j = 1; j < n; j++){
+                if(matrix[i][j] == 0){
+                    matrix[0][j] = 0;
+                    matrix[i][0] = 0;
+                }
+            }
+        }
+
+        // Filling Subgrid
+        for(int i = 1; i < m; i++){
+            for(int j = 1; j < n; j++){
+                if(matrix[i][0] == 0 || matrix[0][j] == 0){
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        // Filling first row and first column
+        if(rowFlag){
+            for(int row = 0; row < m; row++){
+                matrix[row][0] = 0;
+            }
+        }
+        if(colFlag){
+            for(int col = 0; col < n; col++){
+                matrix[0][col] = 0;
+            }
+        }
+  }
